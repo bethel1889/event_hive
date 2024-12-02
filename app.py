@@ -14,7 +14,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///database/event_hive.db")
+db = SQL("sqlite:///database/eventlink.db")
 
 @app.after_request
 def after_request(response):
@@ -282,7 +282,7 @@ def update_room():
 
 
 ####
-######## TODO: MATES
+######## MATES
 ####
 
 # MATES
@@ -370,7 +370,7 @@ def mates():
     
 
 ####
-######## TODO: REGISTER, LOGIN, LOGOUT
+######## REGISTER, LOGIN, LOGOUT
 ####
 
 # REGISTER
