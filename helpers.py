@@ -74,7 +74,3 @@ def generate_key(keys):
         key = str(unique_number).zfill(6)
         if key not in keys_set:
             return key
-
-        
-
-
