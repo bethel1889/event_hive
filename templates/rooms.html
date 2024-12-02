@@ -1,30 +1,38 @@
 {% extends "layout.html" %} {% block title %}Rooms{% endblock %} {% block main
 %}
-<!--The section that allows you to join a room-->
-<form action="/rooms" method="post">
-  <div class="mb-3">
-    <input
-      autocomplete="off"
-      autofocus
-      class="form-control mx-auto w-auto"
-      name="key"
-      placeholder="Room Key"
-      type="text"
-      required
-    />
-    <input hidden name="action" value="join" />
-  </div>
-  <button class="btn btn-primary" type="submit">Join Room</button>
-</form>
 <div class="container">
+  <h2 class="mb-4 text-center">Enter room key below to join a room</h2>
+  <!-- Join Room Section -->
+  <div class="text-center mb-4">
+    <form
+      action="/rooms"
+      method="post"
+      class="d-flex justify-content-center align-items-center flex-column"
+    >
+      <div class="mb-3 w-50">
+        <input
+          autocomplete="off"
+          autofocus
+          class="form-control"
+          name="key"
+          placeholder="Enter Room Key"
+          type="text"
+          required
+        />
+        <input hidden name="action" value="join" />
+      </div>
+      <button class="btn btn-primary" type="submit">Join Room</button>
+    </form>
+  </div>
+  {% if rooms %}
   <h2 class="mb-4 text-center">Joined Rooms</h2>
 
-  <!-- Filter Rooms -->
+  <!-- Filter Rooms Section -->
   <form method="post" action="/rooms" class="mb-4">
     <input name="action" value="filter" hidden />
-    <div class="row">
+    <div class="row justify-content-center">
       <div class="col-md-6">
-        <label for="status" class="form-label">Filter by Status:</label>
+        <label for="status-form" class="form-label">Filter by Status:</label>
         <select id="status-form" name="status" class="form-select">
           <option value="all">All</option>
           <option value="0">Open</option>
@@ -37,16 +45,13 @@
     </div>
   </form>
 
-  <!-- The Section that allows you to create new room -->
-  <div class="text-center mb-4">
-    <a href="/rooms/create" class="btn btn-success">
-      <i class="bi bi-plus-circle me-2"></i>Create Room
-    </a>
-  </div>
+  <!-- Create Room Section -->
+  <!--<div class="text-center mb-4">
+    <a href="/rooms/create" class="btn btn-success"> Create Room </a>
+  </div>-->
 
   <!-- Rooms Table -->
-  {% if rooms %}
-  <div class="row">
+  <div class="table-responsive">
     <table class="table table-bordered table-hover">
       <thead class="table-info">
         <tr>
@@ -55,7 +60,6 @@
           <th>Description</th>
           <th>Key</th>
           <th>Status</th>
-          <!--<th>Members</th>-->
           <th>Created on</th>
           <th>Last Updated on</th>
           <th>Action</th>
@@ -73,8 +77,10 @@
           <td>{{ room.updated_at }}</td>
           <td>
             <form method="POST" action="/rooms">
-              <input hidden value="{{ room.id }}" />
-              <input type="submit" value="Leave Room" />
+              <input hidden name="room_id" value="{{ room.id }}" />
+              <button type="submit" class="btn btn-danger btn-sm">
+                Leave Room
+              </button>
             </form>
           </td>
         </tr>
@@ -84,7 +90,14 @@
   </div>
   {% else %}
   <div class="text-center mt-4">
-    <p class="text-muted">You have not joined any rooms yet.</p>
+    <p class="text-muted">
+      You have not joined any rooms yet. <br />
+      Enter a room key to join a room or submit a request to create one<a
+        href="/rooms/create"
+      >
+        here
+      </a>
+    </p>
   </div>
   {% endif %}
 </div>

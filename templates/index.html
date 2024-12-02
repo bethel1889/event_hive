@@ -4,8 +4,7 @@
   <!-- Header Section -->
   <div class="text-center mb-4">
     <h1 class="display-4">
-      Welcome to
-      <span class="text-primary">EventHive</span>
+      Welcome to <span class="text-primary">EventHive</span>
     </h1>
     <p class="lead">
       The ultimate platform to make meaningful connections at events.<br />
@@ -15,8 +14,8 @@
 
   <!-- Features Section -->
   <div class="row text-center mb-5">
-    <div class="col-md-4">
-      <div class="card shadow-sm">
+    <div class="col-md-4 mb-4 mb-md-0">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h5 class="card-title">Create Event Rooms</h5>
           <p class="card-text">
@@ -26,8 +25,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card shadow-sm">
+    <div class="col-md-4 mb-4 mb-md-0">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h5 class="card-title">Connect Instantly</h5>
           <p class="card-text">
@@ -37,7 +36,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h5 class="card-title">Personalized Networking</h5>
           <p class="card-text">
@@ -48,23 +47,10 @@
     </div>
   </div>
 
-  <!-- Call-to-Action Buttons -->
-  <div class="text-center mb-5">
-    <a href="/register" class="btn btn-primary btn-lg me-3">Sign Up</a>
-    <a href="/login" class="btn btn-secondary btn-lg">Log In</a>
+  <!-- Call-to-Action Buttons for Logged-In Users -->
+  <div class="text-center">
+    <a href="/rooms" class="btn btn-primary btn-lg me-3">Join Event Rooms</a>
+    <a href="/mates" class="btn btn-secondary btn-lg">View Event Mates</a>
   </div>
-
-  <!-- Footer Section -->
-  <footer class="text-center">
-    <p class="small text-muted">
-      <a href="/privacy-policy" class="text-decoration-none me-3"
-        >Privacy Policy</a
-      >
-      <a href="/terms-of-service" class="text-decoration-none me-3"
-        >Terms of Service</a
-      >
-      <a href="/contact" class="text-decoration-none">Contact Us</a>
-    </p>
-  </footer>
 </div>
 {% endblock %}

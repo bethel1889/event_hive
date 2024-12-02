@@ -2,35 +2,52 @@
 main %}
 <div class="text-center mb-4">
   <h1 class="display-4">
-    Welcome to
-    <span class="text-primary">EventHive</span>
+    Welcome to <span class="text-primary">EventHive</span>
   </h1>
   <p class="lead">
-    We Connect skilled mechanics with clients who need them most.<br />
-    New here? <a href="/register">Register Now!</a>
+    Connect with other event attendees and expand your network.<br />
+    New here? <a href="/register" class="text-primary">Register Now!</a>
   </p>
 </div>
-<form action="/login" method="post">
+
+<form
+  action="/login"
+  method="post"
+  class="w-100"
+  style="max-width: 400px; margin: 0 auto"
+>
   <div class="mb-3">
+    <label for="username" class="form-label visually-hidden">Username</label>
     <input
+      id="username"
       autocomplete="off"
       autofocus
-      class="form-control mx-auto w-auto"
+      class="form-control"
       name="username"
       placeholder="Username"
       type="text"
       required
+      aria-label="Username"
     />
   </div>
   <div class="mb-3">
+    <label for="password" class="form-label visually-hidden">Password</label>
     <input
-      class="form-control mx-auto w-auto"
+      id="password"
+      class="form-control"
       name="password"
       placeholder="Password"
       type="password"
       required
+      aria-label="Password"
     />
   </div>
-  <button class="btn btn-primary" type="submit">Log In</button>
+  <button
+    class="btn btn-primary"
+    style="width: 75%; margin: 0 auto"
+    type="submit"
+  >
+    Log In
+  </button>
 </form>
 {% endblock %}

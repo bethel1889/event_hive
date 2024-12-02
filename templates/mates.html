@@ -1,22 +1,13 @@
 {% extends "layout.html" %} {% block title %}Event Mates{% endblock %} {% block
 main %}
 <div class="container">
-  <h2 class="mb-4 text-center">Event Mates</h2>
-
-  <!-- Create New Issue Button -->
-  <!--{% if session["user_id"] %}
-    <div class="text-center mb-4">
-        <a href="/create_issue" class="btn btn-success">
-            <i class="bi bi-plus-circle me-2"></i>Join Room
-        </a>
-    </div>
-    {% endif %}-->
+  <h2 class="mb-4 text-center">View Event Mates</h2>
 
   <!-- Filter Rooms -->
   <form method="POST" action="/mates" class="mb-4">
     <input name="action" value="filter" hidden />
-    <div class="row">
-      <div class="col-md-6">
+    <div class="d-flex flex-column align-items-center">
+      <div class="mb-3 w-50">
         <label for="status" class="form-label">Filter by Status:</label>
         <select id="status" name="status" class="form-select">
           <option value="all" selected>All</option>
@@ -24,7 +15,8 @@ main %}
           <option value="1">Connections</option>
         </select>
       </div>
-      <div class="col-md-6">
+      <div class="mb-3 w-50">
+        <!--here-->
         <label for="room" class="form-label">Filter by Event:</label>
         <select id="room" name="room_id" class="form-select">
           <option value="all" selected>All</option>
@@ -33,15 +25,15 @@ main %}
           {% endfor %}
         </select>
       </div>
-    </div>
-    <div class="text-center mt-3">
-      <button type="submit" class="btn btn-primary">Apply Filters</button>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+      </div>
     </div>
   </form>
 
   <!-- Rooms Table -->
   {% if mates %}
-  <div class="row">
+  <div class="table-responsive">
     <table class="table table-bordered table-hover">
       <thead class="table-info">
         <tr>
@@ -60,12 +52,22 @@ main %}
           <td>{{ mate.name }}</td>
           <td>{{ mate.room }}</td>
           <td>{{ mate.status }}</td>
-          <td>{{ mate.profile_link }}</td>
+          <td>
+            <a
+              href="{{ mate.profile_link }}"
+              target="_blank"
+              class="text-decoration-none text-primary"
+            >
+              View Profile
+            </a>
+          </td>
           <td>
             <form method="POST" action="/mates">
               <input name="mate_id" value="{{ mate.user_id }}" hidden />
               <input name="action" value="set_status" hidden />
-              <input type="submit" value="Change Status" />
+              <button type="submit" class="btn btn-warning btn-sm">
+                Change Status
+              </button>
             </form>
           </td>
         </tr>
@@ -76,7 +78,7 @@ main %}
   {% else %}
   <div class="text-center mt-4">
     <p class="text-muted">
-      No Mates to display. Try adjusting your filters or Joining an Event room.
+      No Mates to display. Try adjusting your filters or joining an Event room.
     </p>
   </div>
   {% endif %}
