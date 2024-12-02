@@ -24,7 +24,25 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+# REFRESH MATES
+def refresh_mates(id):
+    '''Takes a users id as input, and adds all mates to the mates table'''
+    # Step 1: get a list of the id of every joined room
+    joined_rooms = db.execute("SELECT room_id FROM members WHERE user_id = ?", id)
+    joined_room_ids = [room["room_id"] for room in joined_rooms]
 
+    # Step 2: Iterate through the rooms and find other users
+    for room_id in joined_room_ids:
+        mate_infos = db.execute("SELECT user_id, room_id FROM members WHERE room_id = ? AND user_id != ?",
+                                room_id, id)
+
+        # Step 3: Add other users to the mates table if not already present
+        for mate_info in mate_infos:
+            mate = db.execute("SELECT * FROM mates WHERE user_id1 = ? AND user_id2 = ? AND room_id=?", 
+                                    id, mate_info["user_id"], mate_info["room_id"])    
+            if mate: continue
+            db.execute("INSERT INTO mates (user_id1, user_id2, room_id, status) VALUES (?, ?, ?, ?)",
+                id, mate_info["user_id"], mate_info["room_id"], 0)
 
 # HOMEPAGE
 @app.route("/", methods=["GET", "POST"])
@@ -32,7 +50,8 @@ def after_request(response):
 def index():
     id = session["user_id"]
     info = db.execute("SELECT * FROM users WHERE id=?;", id)[0]
-    return render_template("index.html", info=info)# render the admin button if info.role is 1(user is an admin)
+    refresh_mates(id)
+    return render_template("index.html", info=info)
 
 ####
 ######## ADMIN
@@ -180,14 +199,13 @@ def rooms():
             JOIN rooms ON members.room_id = rooms.id
             WHERE members.user_id=?''', id)# sort the rooms in descending order
         return render_template("rooms.html", rooms=rooms, info=info)
-        # show all rooms joined and a field for event key where one can enter the key and join the event
     else:
         action = request.form.get("action")# get the action to be performed
         if action == "join":
             # add the person to the room
             key = request.form.get("event_key")
             room = db.execute("SELECT * FROM rooms WHERE key=? AND status=?;", key, 1)
-            if not room: 
+            if not room:
                 flash("The rooms with the key provided does not exist or is not active")
                 return redirect("/rooms")
             
@@ -343,8 +361,7 @@ def mates():
         elif action == "set_status":
             # get the connection id, set the status to the opposite of what it was before
             user_id2 = request.form.get("mate_id")
-            if int(request.form.get("status")): status = 0
-            else: status = 1
+            status = 1 - int(request.form.get("status"))
             db.execute('''UPDATE mates
                     SET status=? WHERE user_id1=? AND user_id2=?;''', status, id, user_id2)
             flash("Connection status changed")
