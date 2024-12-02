@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% block title %}Create Room{% endblock %} {% block
+main %}
+<h1 class="mb-4">{% if room %}Update{% else %}Create{% endif %} Room</h1>
+
+<!-- Edit Room -->
+<form
+  action="{% if room %}/rooms/update{% else %}/rooms/create{% endif %}"
+  method="POST"
+  class="mx-auto"
+  style="max-width: 600px"
+>
+  <!-- Name -->
+  <div class="mb-3">
+    <label for="name" class="form-label">Room Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      name="name"
+      value="{% if room %}{{ room.name }}{% endif %}"
+      required
+    />
+    <input
+      hidden
+      name="room_id"
+      value="{% if room %}{{ room.id }}{% endif %}"
+    />
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3">
+    <label for="bio" class="form-label">Description</label>
+    <textarea
+      class="form-control"
+      id="bio"
+      name="description"
+      rows="4"
+      required
+    >
+        {% if room %}{{ room.description }}{% endif %}</textarea
+    >
+  </div>
+  <!-- Save Button -->
+  <div class="text-center">
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="/profile" class="btn btn-secondary ms-2">Cancel</a>
+  </div>
+</form>
+{% endblock %}

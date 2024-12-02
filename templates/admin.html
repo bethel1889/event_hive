@@ -1,0 +1,118 @@
+{% extends "layout.html" %} {% block title %}Admin{% endblock %} {% block main
+%}
+
+<div class="container">
+  <!-- Search for a user -->
+  <form action="/admin" method="post" class="mb-4">
+    <input type="hidden" name="action" value="user" />
+    <div class="mb-3">
+      <input
+        class="form-control mx-auto w-auto"
+        name="Username"
+        placeholder="Enter Username"
+        type="text"
+        required
+      />
+    </div>
+    <button class="btn btn-primary" type="submit">Find User(s)</button>
+  </form>
+
+  <!-- Search for a room -->
+  <form action="/admin" method="post" class="mb-4">
+    <input type="hidden" name="action" value="room" />
+    <div class="mb-3">
+      <input
+        class="form-control mx-auto w-auto"
+        name="key"
+        placeholder="Room Key"
+        type="text"
+        required
+      />
+    </div>
+    <button class="btn btn-primary" type="submit">Find Room</button>
+  </form>
+
+  <!-- Display users -->
+  {% if users %}
+  <h2 class="text-center mb-4">Users</h2>
+  <table class="table table-bordered table-hover">
+    <thead class="table-info">
+      <tr>
+        <th>S/N</th>
+        <th>Name</th>
+        <th>Profile Link</th>
+        <th>Role</th>
+        <th>Created On</th>
+        <th>Last Updated On</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ user.name }}</td>
+        <td>
+          <a href="{{ user.profile_link }}" target="_blank">View Profile</a>
+        </td>
+        <td>{{ 'Admin' if user.role == 1 else 'User' }}</td>
+        <td>{{ user.created_at }}</td>
+        <td>{{ user.updated_at }}</td>
+        <td>
+          <form method="post" action="/admin/action">
+            <input type="hidden" name="action" value="user_update" />
+            <input type="hidden" name="user_id" value="{{ user.id }}" />
+            <button class="btn btn-warning btn-sm" type="submit">
+              Change Role
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <!-- Display rooms -->
+  {% if rooms %}
+  <h2 class="text-center mb-4">Rooms</h2>
+  <table class="table table-bordered table-hover">
+    <thead class="table-info">
+      <tr>
+        <th>S/N</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Key</th>
+        <th>Status</th>
+        <th>Created On</th>
+        <th>Last Updated On</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for room in rooms %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ room.name }}</td>
+        <td>{{ room.description }}</td>
+        <td>{{ room.key }}</td>
+        <td>{{ 'Open' if room.status == 1 else 'Closed' }}</td>
+        <td>{{ room.created_at }}</td>
+        <td>{{ room.updated_at }}</td>
+        <td>
+          <form method="post" action="/admin/action">
+            <input type="hidden" name="action" value="room_update" />
+            <input type="hidden" name="room_id" value="{{ room.id }}" />
+            <button class="btn btn-warning btn-sm" type="submit">
+              Change Status
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+
+{% endblock %}

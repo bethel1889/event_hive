@@ -1,0 +1,70 @@
+{% extends "layout.html" %} {% block title %} Welcome to EventHive {% endblock
+%} {% block main %}
+<div class="container py-5">
+  <!-- Header Section -->
+  <div class="text-center mb-4">
+    <h1 class="display-4">
+      Welcome to
+      <span class="text-primary">EventHive</span>
+    </h1>
+    <p class="lead">
+      The ultimate platform to make meaningful connections at events.<br />
+      Connect, collaborate, and grow your network effortlessly.
+    </p>
+  </div>
+
+  <!-- Features Section -->
+  <div class="row text-center mb-5">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Create Event Rooms</h5>
+          <p class="card-text">
+            Set up unique event rooms where attendees can easily join and
+            interact.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Connect Instantly</h5>
+          <p class="card-text">
+            View and connect with other attendees' LinkedIn profiles seamlessly.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Personalized Networking</h5>
+          <p class="card-text">
+            Build meaningful, two-way connections that last beyond the event.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call-to-Action Buttons -->
+  <div class="text-center mb-5">
+    <a href="/register" class="btn btn-primary btn-lg me-3">Sign Up</a>
+    <a href="/login" class="btn btn-secondary btn-lg">Log In</a>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="text-center">
+    <p class="small text-muted">
+      <a href="/privacy-policy" class="text-decoration-none me-3"
+        >Privacy Policy</a
+      >
+      <a href="/terms-of-service" class="text-decoration-none me-3"
+        >Terms of Service</a
+      >
+      <a href="/contact" class="text-decoration-none">Contact Us</a>
+    </p>
+  </footer>
+</div>
+{% endblock %}
