@@ -2,14 +2,14 @@
 %}
 <div class="container">
   <!-- Search for a User -->
-  <form action="/admin" method="post" class="mb-4 p-4 border rounded shadow-sm">
+  <form action="/admin" method="POST" class="mb-4 p-4 border rounded shadow-sm">
     <input type="hidden" name="action" value="user" />
     <div class="mb-3">
       <label for="username" class="form-label fw-bold">Search for a User</label>
       <input
         class="form-control"
         id="username"
-        name="Username"
+        name="username"
         placeholder="Enter Username"
         type="text"
         required
@@ -21,7 +21,7 @@
   </form>
 
   <!-- Search for a Room -->
-  <form action="/admin" method="post" class="mb-4 p-4 border rounded shadow-sm">
+  <form action="/admin" method="POST" class="mb-4 p-4 border rounded shadow-sm">
     <input type="hidden" name="action" value="room" />
     <div class="mb-3">
       <label for="room_key" class="form-label fw-bold">Search for a Room</label>
@@ -59,9 +59,11 @@
         {% for user in users %}
         <tr>
           <td>{{ loop.index }}</td>
-          <td>{{ user.name }}</td>
+          <td>{{ user.username }}</td>
           <td>
-            <a href="{{ user.profile_link }}" target="_blank">View Profile</a>
+            <a href="https://{{ user.profile_link }}" target="_blank"
+              >View Profile</a
+            >
           </td>
           <td>{{ 'Admin' if user.role == 1 else 'User' }}</td>
           <td>{{ user.created_at }}</td>

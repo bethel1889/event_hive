@@ -24,7 +24,7 @@
       <button class="btn btn-primary" type="submit">Join Room</button>
     </form>
   </div>
-  {% if rooms %}
+
   <h2 class="mb-4 text-center">Joined Rooms</h2>
 
   <!-- Filter Rooms Section -->
@@ -35,8 +35,8 @@
         <label for="status-form" class="form-label">Filter by Status:</label>
         <select id="status-form" name="status" class="form-select">
           <option value="all">All</option>
-          <option value="0">Open</option>
-          <option value="1">Closed</option>
+          <option value="0">Closed</option>
+          <option value="1">Open</option>
         </select>
       </div>
     </div>
@@ -49,7 +49,7 @@
   <!--<div class="text-center mb-4">
     <a href="/rooms/create" class="btn btn-success"> Create Room </a>
   </div>-->
-
+  {% if rooms %}
   <!-- Rooms Table -->
   <div class="table-responsive">
     <table class="table table-bordered table-hover">
@@ -91,7 +91,7 @@
   {% else %}
   <div class="text-center mt-4">
     <p class="text-muted">
-      You have not joined any rooms yet. <br />
+      No rooms found. <br />
       Enter a room key to join a room or submit a request to create one
       <a href="/rooms/create">here.</a>
     </p>

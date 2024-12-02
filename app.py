@@ -71,20 +71,20 @@ def admin():
     if request.method == "GET":
         return render_template("admin.html", info=info) 
     else:
-        action = request.form.get("get_action")
+        action = request.form.get("action")
         if action == "user":
             username = request.form.get("username")
             if username:
-                users = db.execute("SELECT * FROM users WHERE username LIKE ?", ('%' + username + '%',))
+                users = db.execute("SELECT * FROM users WHERE username LIKE ?", f'%{username}%')
                 return render_template("admin.html", users=users, info=info)
             else:
                 flash("Please provide a username.")
                 return redirect("/admin")
 
         elif action == "room":
-            room_key = request.form.get("name")
+            room_key = request.form.get("key")
             if room_key:
-                rooms = db.execute("SELECT * FROM rooms WHERE key = ?", (room_key,))
+                rooms = db.execute("SELECT * FROM rooms WHERE key = ?", room_key)
                 return render_template("admin.html", rooms=rooms, info=info)
             else:
                 flash("Please provide a room key.")
@@ -112,8 +112,8 @@ def admin_actions():
         # Toggle the user's role
         current_role = db.execute("SELECT role FROM users WHERE id = ?", target_user_id)
         if current_role:
-            new_role = 0 if current_role[0]["role"] == 1 else 1
-            db.execute("UPDATE users SET role = ? WHERE id = ?", (new_role, target_user_id))
+            new_role = 1 - current_role[0]["role"]
+            db.execute("UPDATE users SET role = ? WHERE id = ?", new_role, target_user_id)
             flash(f"User role updated successfully.")
         else:
             flash("User not found.")
@@ -128,9 +128,9 @@ def admin_actions():
         # Toggle the room's status
         current_status = db.execute("SELECT status FROM rooms WHERE id = ?", target_room_id)
         if current_status:
-            new_status = 0 if current_status[0]["status"] == 1 else 1
-            db.execute("UPDATE rooms SET status = ? WHERE id = ?", (new_status, target_room_id))
-            flash(f"Room status updated successfully.")
+            new_status = 1 - current_status[0]["status"]
+            db.execute("UPDATE rooms SET status = ? WHERE id = ?", new_status, target_room_id)
+            flash("Room status updated successfully.")
         else:
             flash("Room not found.")
         return redirect("/admin")
@@ -203,14 +203,14 @@ def rooms():
         action = request.form.get("action")# get the action to be performed
         if action == "join":
             # add the person to the room
-            key = request.form.get("event_key")
+            key = request.form.get("key")
             room = db.execute("SELECT * FROM rooms WHERE key=? AND status=?;", key, 1)
             if not room:
-                flash("The rooms with the key provided does not exist or is not active")
+                flash("The room with the key provided does not exist or is not active")
                 return redirect("/rooms")
             
             # insert the event id and room_id pair in members table
-            db.execute("INSERT INTO members (user_id, room_id) VALUES (?, ?);", id, room["id"])
+            db.execute("INSERT INTO members (user_id, room_id) VALUES (?, ?);", id, room[0]["id"])
             return redirect("/rooms")
         elif action == "filter":
             status = request.form.get("status")
@@ -231,7 +231,7 @@ def rooms():
             JOIN members ON users.id = members.user_id
             JOIN rooms ON members.room_id = rooms.id
             WHERE members.user_id=? AND rooms.status=?''', id, status)
-            return render_template("rooms.html", rooms=rooms)
+            return render_template("rooms.html", rooms=rooms, info=info)
             
         else:
             # remove the person from the room, if they want to leave
@@ -275,7 +275,6 @@ def update_room():
         room_id = request.form.get("room_id")
         name = request.form.get("name")
         description = request.form.get("description")
-        print(name, description)
         db.execute('''UPDATE rooms 
             SET name=?, description=? WHERE creator_id=? AND rooms.id=?;''', name, description, id, room_id)
         return redirect("/profile")
@@ -298,7 +297,17 @@ def mates():
                             FROM members 
                             JOIN rooms ON members.room_id=rooms.id 
                             WHERE members.user_id=?;''', id)
-        return render_template("mates.html", info=info, rooms=rooms)
+        mates = db.execute(''' SELECT
+                                            users.id AS user_id,
+                                            users.username AS user_name,
+                                            users.profile_link AS profile_link,
+                                            rooms.name AS room,
+                                            mates.status AS status
+                                        FROM users 
+                                        JOIN mates ON users.id = mates.user_id2
+                                        JOIN rooms ON mates.room_id = rooms.id
+                                        WHERE mates.user_id1=? ;''', id)
+        return render_template("mates.html", info=info, rooms=rooms, mates=mates)
         # show the person a page to filter mates by rooms/events, and those whose link has been clicked 
     else:
         action = request.form.get("action")
@@ -309,7 +318,7 @@ def mates():
             if status == "all" and room_id == "all":
                 mates = db.execute(''' SELECT
                                             users.id AS user_id,
-                                            users.name AS user_name,
+                                            users.username AS user_name,
                                             users.profile_link AS profile_link,
                                             rooms.name AS room,
                                             mates.status AS status
@@ -322,7 +331,7 @@ def mates():
             elif status == "all" and room_id != "all":
                 mates = db.execute(''' SELECT
                                             users.id AS user_id,
-                                            users.name AS user_name,
+                                            users.username AS user_name,
                                             users.profile_link AS profile_link,
                                             rooms.name AS room,
                                             mates.status AS status
@@ -335,7 +344,7 @@ def mates():
             elif status != "all" and room_id == "all":
                 mates = db.execute(''' SELECT
                                             users.id AS user_id,
-                                            users.name AS user_name,
+                                            users.username AS user_name,
                                             users.profile_link AS profile_link,
                                             rooms.name AS room,
                                             mates.status AS status
@@ -348,7 +357,7 @@ def mates():
             elif status != "all" and room_id != "all":
                 mates = db.execute(''' SELECT
                                             users.id AS user_id,
-                                            users.name AS user_name,
+                                            users.username AS user_name,
                                             users.profile_link AS profile_link,
                                             rooms.name AS room,
                                             mates.status AS status

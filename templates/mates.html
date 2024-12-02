@@ -51,10 +51,12 @@ main %}
           <td>{{ loop.index }}</td>
           <td>{{ mate.name }}</td>
           <td>{{ mate.room }}</td>
-          <td>{{ mate.status }}</td>
+          <td>
+            {% if mate.status == 0 %}Event mate{% else %}Connection{% endif %}
+          </td>
           <td>
             <a
-              href="{{ mate.profile_link }}"
+              href="https://{{ mate.profile_link }}"
               target="_blank"
               class="text-decoration-none text-primary"
             >
