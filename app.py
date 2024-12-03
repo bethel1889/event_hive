@@ -50,7 +50,6 @@ def refresh_mates(id):
 def index():
     id = session["user_id"]
     info = db.execute("SELECT * FROM users WHERE id=?;", id)[0]
-    refresh_mates(id)
     return render_template("index.html", info=info)
 
 ####
@@ -290,6 +289,7 @@ def update_room():
 def mates():
     id = session["user_id"]
     info = db.execute("SELECT * FROM users WHERE id=?;", id)[0]
+    refresh_mates(id)
     if request.method == "GET":
         rooms = db.execute('''SELECT 
                                 members.room_id AS id, 
