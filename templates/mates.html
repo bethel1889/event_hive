@@ -49,7 +49,7 @@ main %}
         {% for mate in mates %}
         <tr>
           <td>{{ loop.index }}</td>
-          <td>{{ mate.name }}</td>
+          <td>{{ mate.user_name }}</td>
           <td>{{ mate.room }}</td>
           <td>
             {% if mate.status == 0 %}Event mate{% else %}Connection{% endif %}
