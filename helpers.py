@@ -60,10 +60,12 @@ def write_json(data, file_path):
         json.dump(data, json_file, indent=4)  # indent=4 makes the JSON file more readable
 
 
-def is_valid_linkedin_url(url):
-    if not url: return False
-    pattern = r"^(https?:\/\/)?(www\.)?linkedin\.com\/(in|pub|company|school)\/[a-zA-Z0-9-_%]+(\/)?$"
-    return re.match(pattern, url) is not None
+def validate_linkedin_url(url):
+    pattern = r"(https?:\/\/)?(www\.)?linkedin\.com\/(in|pub|company|school)\/[a-zA-Z0-9-_%]+"
+    match = re.search(pattern, url)
+    if match:
+        return "https://" + match.group(0).lstrip("https://")
+    return None
 
 
 def generate_key(keys):

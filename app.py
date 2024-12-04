@@ -2,7 +2,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import apology, login_required, check, is_valid_linkedin_url, generate_key
+from helpers import apology, login_required, check, validate_linkedin_url, generate_key
 
 
 # Configure application
@@ -165,7 +165,7 @@ def edit_profile():
         return render_template("edit_profile.html", info=info)
     else:
         username = request.form.get("username")
-        profile_link = request.form.get("profile_link")
+        profile_link = validate_linkedin_url(request.form.get("profile_link"))
         db.execute('''UPDATE users 
             SET username=?, profile_link=? WHERE id=?;''', username, profile_link, id)
         flash("Profile Updated")
@@ -397,9 +397,9 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
-        profile_link = request.form.get("profile_link")
+        profile_link = validate_linkedin_url(request.form.get("profile_link"))
 
-        if not is_valid_linkedin_url(profile_link): return apology("Please enter a valid linkedin Profile url", 403)
+        if not profile_link: return apology("Please enter a valid linkedin Profile url", 403)
 
         if not check(username, password): return apology("Enter username and password to Register")
 
