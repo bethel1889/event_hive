@@ -290,13 +290,13 @@ def mates():
     id = session["user_id"]
     info = db.execute("SELECT * FROM users WHERE id=?;", id)[0]
     refresh_mates(id)
-    if request.method == "GET":
-        rooms = db.execute('''SELECT 
+    rooms = db.execute('''SELECT 
                                 members.room_id AS id, 
                                 rooms.name AS name
                             FROM members 
                             JOIN rooms ON members.room_id=rooms.id 
                             WHERE members.user_id=?;''', id)
+    if request.method == "GET":
         mates = db.execute(''' SELECT
                                             users.id AS user_id,
                                             users.username AS user_name,
@@ -326,7 +326,7 @@ def mates():
                                         JOIN mates ON users.id = mates.user_id2
                                         JOIN rooms ON mates.room_id = rooms.id
                                         WHERE mates.user_id1=? ;''', id)
-                return render_template("mates.html", info=info, mates=mates)
+                return render_template("mates.html", info=info, mates=mates, rooms=rooms)
             
             elif status == "all" and room_id != "all":
                 mates = db.execute(''' SELECT
@@ -339,7 +339,7 @@ def mates():
                                         JOIN mates ON users.id = mates.user_id2
                                         JOIN rooms ON mates.room_id = rooms.id
                                         WHERE mates.user_id1=? AND rooms.id=?;''', id, room_id)
-                return render_template("mates.html", info=info, mates=mates)
+                return render_template("mates.html", info=info, mates=mates, rooms=rooms)
             
             elif status != "all" and room_id == "all":
                 mates = db.execute(''' SELECT
@@ -352,7 +352,7 @@ def mates():
                                         JOIN mates ON users.id = mates.user_id2
                                         JOIN rooms ON mates.room_id = rooms.id
                                         WHERE mates.user_id1=? AND mates.status=?;''', id, status)
-                return render_template("mates.html", info=info, mates=mates)
+                return render_template("mates.html", info=info, mates=mates, rooms=rooms)
             
             elif status != "all" and room_id != "all":
                 mates = db.execute(''' SELECT
@@ -365,7 +365,7 @@ def mates():
                                         JOIN mates ON users.id = mates.user_id2
                                         JOIN rooms ON mates.room_id = rooms.id
                                         WHERE mates.user_id1=? AND mates.status=? AND rooms.id=?;''', id, status, room_id)
-                return render_template("mates.html", info=info, mates=mates)
+                return render_template("mates.html", info=info, mates=mates, rooms=rooms)
 
         elif action == "set_status":
             # get the connection id, set the status to the opposite of what it was before
